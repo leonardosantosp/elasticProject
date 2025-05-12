@@ -61,13 +61,13 @@ public class EsClient {
                 .elasticsearch.ElasticsearchClient((transport));
     }
 
-    public SearchResponse search(String query, int page) {
+    public SearchResponse search(String query, Integer page) {
         Query matchQuery = MatchQuery.of(
                 q -> q.field("content").query(query))._toQuery();
         SearchResponse<ObjectNode> response;
 
         try {
-            response = elasticsearchClient.search(s -> s.index("wikipedia").from(page).size(10)
+            response = elasticsearchClient.search(s -> s.index("wikipedia").from((page - 1)*10).size(10)
                     .query(matchQuery), ObjectNode.class);
         } catch (IOException e) {
             throw new RuntimeException(e);
